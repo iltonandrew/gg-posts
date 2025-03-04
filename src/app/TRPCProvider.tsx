@@ -4,6 +4,7 @@ import { useState } from "react";
 import { TRPCProvider } from "@/utils/trpc";
 import type { AppRouter } from "@/server";
 import SuperJSON from "superjson";
+import { getBaseUrl } from "@/utils/getBaseUrl";
 function makeQueryClient() {
   return new QueryClient({
     defaultOptions: {
@@ -35,7 +36,7 @@ export function TRPCClient({ children }: { children: React.ReactNode }) {
     createTRPCClient<AppRouter>({
       links: [
         httpBatchLink({
-          url: "http://localhost:3000/api/trpc",
+          url: `${getBaseUrl()}/api/trpc`,
           transformer: SuperJSON,
         }),
       ],
