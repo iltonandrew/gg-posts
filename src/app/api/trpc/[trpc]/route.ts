@@ -2,6 +2,7 @@ import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
 
 import { appRouter } from "@/server";
 import { auth } from "@/lib/auth";
+import { db } from "@/db";
 
 const handler = (req: Request) =>
   fetchRequestHandler({
@@ -10,6 +11,7 @@ const handler = (req: Request) =>
     router: appRouter,
     createContext: async () => ({
       session: await auth.api.getSession({ headers: req.headers }),
+      db,
     }),
   });
 
