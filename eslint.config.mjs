@@ -18,6 +18,14 @@ const eslintConfig = [
         { vars: "all", args: "after-used", ignoreRestSiblings: false },
       ],
     },
+    ignores: [
+      "node_modules/",
+      "dist/",
+      "build/",
+      ".next/",
+      "coverage/",
+      "**/*.min.js",
+    ],
   },
 ];
 
