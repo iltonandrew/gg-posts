@@ -1,5 +1,6 @@
 import { publicProcedure, router, protectedProcedure } from "./trpc";
 import { db, schema } from "@/db";
+import { eq } from "drizzle-orm";
 import { z } from "zod";
 
 export const appRouter = router({
@@ -12,7 +13,7 @@ export const appRouter = router({
   }),
 
   getUsers: protectedProcedure.query(async ({ ctx }) => {
-    return await db.query.user.findMany();
+    return await ctx.db.query.user.findMany();
   }),
 
   createPost: protectedProcedure
@@ -23,12 +24,25 @@ export const appRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      return await db
+      return await ctx.db
         .insert(schema.posts)
         .values({
           ...input,
           userId: ctx.session!.user.id,
         })
+        .returning();
+    }),
+
+  deletePost: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.db
+        .delete(schema.posts)
+        .where(eq(schema.posts.id, input.id))
         .returning();
     }),
 });
