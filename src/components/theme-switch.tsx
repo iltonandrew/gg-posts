@@ -22,7 +22,7 @@ export const ThemeSwitch: FC<ThemeSwitchProps> = ({
   const isSSR = useIsSSR();
 
   const onChange = () => {
-    theme === "light" ? setTheme("dark") : setTheme("light");
+    void (theme === "light" ? setTheme("dark") : setTheme("light"));
   };
 
   const {
